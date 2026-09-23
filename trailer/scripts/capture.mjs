@@ -252,6 +252,15 @@ const shots = [
   },
   { name: 'ui', frames: 120, stage: ['unpark', 'day'], sim: NORMAL, hud: 'inspect', cam: between(front(-6, -3.4, 11), front(-5.3, -3.4, 10.4)) },
   { name: 'uisociety', frames: 75, stage: ['day'], sim: NORMAL, hud: 'society', cam: () => front(-5.3, -3.4, 10.4) },
+  // key-art backgrounds for the cover images (single frame, high resolution)
+  {
+    name: 'cover-wide', frames: 1, still: true, size: [3840, 2160], stage: ['unpark', 'day'], sim: 0,
+    cam: () => { const a = -0.42, r = 47; return { pos: [Math.sin(a) * r, 7.5, Math.cos(a) * r - 6], look: [0.5, -4.2, -6] }; },
+  },
+  {
+    name: 'cover-tall', frames: 1, still: true, size: [1800, 2700], stage: ['unpark', 'day'], sim: 0,
+    cam: () => ({ pos: [4.2, 1.2, 31], look: [0.5, -4.6, 0] }),
+  },
   { name: 'night', frames: 270, stage: ['unpark', 'night'], sim: 0.004, cam: between(front(0, -4, 30, -0.12, 0.3), front(0, -3, 24, 0.12, 0.3)) },
 ];
 
@@ -278,7 +287,21 @@ console.log('hero colony ready with', n, 'rabbits');
 await page.evaluate(() => { for (let i = 0; i < 40; i++) window.__T.frame({ pos: [0, 0, 20], look: [0, -4, 0] }, 1 / 30, 0.05); });
 
 for (const shot of shots) {
-  if (only.length && !only.includes(shot.name)) continue;
+  if (only.length ? !only.includes(shot.name) : shot.still) continue;
+  if (shot.still) {
+    const [w, h] = shot.size;
+    await page.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
+    for (const st of shot.stage) await page.evaluate(n => window.__T.stage(n), st);
+    const cam = shot.cam(0);
+    for (let k = 0; k < 20; k++) await page.evaluate((c2) => window.__T.frame(c2, 1 / 30, 0.004), cam);
+    const data = await page.evaluate(c2 => { window.__T.frame(c2, 1 / 30, 0); return window.__bunderground.view.renderer.domElement.toDataURL('image/png'); }, cam);
+    fs.mkdirSync(path.resolve('public/cover'), { recursive: true });
+    const out = path.resolve('public/cover', shot.name + '.png');
+    fs.writeFileSync(out, Buffer.from(data.split(',')[1], 'base64'));
+    await page.setViewport({ width: WIDTH, height: HEIGHT, deviceScaleFactor: 1 });
+    console.log('✓ still', shot.name, '→', out);
+    continue;
+  }
   const dir = path.join(FRAMES, shot.name);
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });

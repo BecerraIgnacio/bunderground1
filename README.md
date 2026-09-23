@@ -1,4 +1,5 @@
 # 🐰 Bunderground
+n![Bunderground](press/bunderground-og-1200x630.png)
 
 A cozy 3D colony-management game about a rabbit warren with a surprisingly complex society. Built with Three.js + Vite. Everything runs in the browser. Saves go to `localStorage` on the player's device, so there's no backend or database.
 

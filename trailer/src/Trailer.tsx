@@ -11,8 +11,8 @@ const { fontFamily } = loadFont('normal', { weights: ['500', '600', '700'], subs
 const BAR = 72;
 export const TRAILER_FRAMES = 32 * BAR + 36;
 
-const BROWN = '#4a2e1a';
-const CREAM = '#fff6e0';
+export const BROWN = '#4a2e1a';
+export const CREAM = '#fff6e0';
 const clip = (name: string) => staticFile(`clips/${name}.mp4`);
 const sfx = (name: string) => staticFile(`audio/sfx-${name}.wav`);
 
@@ -52,7 +52,7 @@ const FadeIn: React.FC<{ len?: number; color?: string }> = ({ len = 15, color = 
   return <AbsoluteFill style={{ backgroundColor: color, opacity: interpolate(frame, [0, len], [1, 0], { extrapolateRight: 'clamp' }) }} />;
 };
 
-const textStyle = (size: number): React.CSSProperties => ({
+export const textStyle = (size: number): React.CSSProperties => ({
   fontFamily,
   fontWeight: 700,
   fontSize: size,
@@ -155,7 +155,7 @@ const Grain: React.FC = () => {
 };
 
 // drifting sparkles / hearts / carrots for the title
-const Floaters: React.FC<{ count?: number }> = ({ count = 26 }) => {
+export const Floaters: React.FC<{ count?: number }> = ({ count = 26 }) => {
   const frame = useCurrentFrame();
   const icons = ['✨', '🥕', '💕', '✨', '🌼', '💎'];
   return (
@@ -171,14 +171,14 @@ const Floaters: React.FC<{ count?: number }> = ({ count = 26 }) => {
 };
 
 // the mascot, drawn in SVG
-const BunnyHead: React.FC<{ size?: number; blink?: boolean }> = ({ size = 260, blink }) => (
+export const BunnyHead: React.FC<{ size?: number; blink?: boolean; fur?: string }> = ({ size = 260, blink, fur = '#fbf4ea' }) => (
   <svg width={size} height={size * 1.15} viewBox="0 0 200 230">
     <g stroke={BROWN} strokeWidth="9" strokeLinejoin="round">
-      <ellipse cx="68" cy="62" rx="24" ry="58" fill="#fbf4ea" transform="rotate(-12 68 62)" />
-      <ellipse cx="132" cy="62" rx="24" ry="58" fill="#fbf4ea" transform="rotate(12 132 62)" />
+      <ellipse cx="68" cy="62" rx="24" ry="58" fill={fur} transform="rotate(-12 68 62)" />
+      <ellipse cx="132" cy="62" rx="24" ry="58" fill={fur} transform="rotate(12 132 62)" />
       <ellipse cx="68" cy="66" rx="10" ry="38" fill="#ffb3c4" stroke="none" transform="rotate(-12 68 66)" />
       <ellipse cx="132" cy="66" rx="10" ry="38" fill="#ffb3c4" stroke="none" transform="rotate(12 132 66)" />
-      <ellipse cx="100" cy="150" rx="78" ry="68" fill="#fbf4ea" />
+      <ellipse cx="100" cy="150" rx="78" ry="68" fill={fur} />
     </g>
     {blink ? (
       <g stroke="#2a1d1a" strokeWidth="7" strokeLinecap="round"><path d="M62 146 q10 7 20 0" fill="none" /><path d="M118 146 q10 7 20 0" fill="none" /></g>
@@ -192,7 +192,7 @@ const BunnyHead: React.FC<{ size?: number; blink?: boolean }> = ({ size = 260, b
   </svg>
 );
 
-const Logo: React.FC<{ size?: number }> = ({ size = 186 }) => {
+export const Logo: React.FC<{ size?: number }> = ({ size = 186 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const letters = 'BUNDERGROUND'.split('');
@@ -220,14 +220,14 @@ const Logo: React.FC<{ size?: number }> = ({ size = 186 }) => {
   );
 };
 
-const Glow: React.FC<{ color?: string; strength?: number }> = ({ color = '255,214,120', strength = 0.55 }) => {
+export const Glow: React.FC<{ color?: string; strength?: number }> = ({ color = '255,214,120', strength = 0.55 }) => {
   const frame = useCurrentFrame();
   const pulse = 0.85 + Math.sin(frame / 12) * 0.15;
   return <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 46%, rgba(${color},${strength * pulse}) 0%, rgba(${color},0) 55%)` }} />;
 };
 
 // rotating light rays behind the logo
-const Rays: React.FC = () => {
+export const Rays: React.FC = () => {
   const frame = useCurrentFrame();
   return (
     <AbsoluteFill style={{ opacity: 0.22, mixBlendMode: 'screen' }}>
