@@ -1,4 +1,5 @@
 import './style.css';
+import { inject, track } from '@vercel/analytics';
 import { W, EX, SEC_PER_HOUR, ROOMS, MAT } from './data.js';
 import { G, on, notify, roomById, rabbitById, isKit } from './game.js';
 import { idx, HALL_Y, cellX, floorY } from './world.js';
@@ -9,6 +10,8 @@ import { setupInput } from './input.js';
 import { UI } from './ui.js';
 import { saveGame, loadGame, clearSave, exportSave, importSave } from './save.js';
 import { sfx, unlockAudio } from './audio.js';
+
+inject(); // Vercel Web Analytics (page views)
 
 const canvas = document.getElementById('c');
 const view = new View(canvas);
@@ -71,6 +74,7 @@ function enterGame() {
 
 function startNew(name) {
   newGame(name);
+  track('new_colony');
   enterGame();
   saveGame();
   UI.showWelcome();
@@ -79,6 +83,7 @@ function startNew(name) {
 function continueGame() {
   const s = loadGame();
   if (!s) { UI.toast({ text: 'No saved warren found.', kind: 'bad' }); return; }
+  track('continue_colony', { day: s.time.day });
   G.state = s;
   initDerived();
   enterGame();
@@ -191,7 +196,8 @@ on('toast', t => {
 });
 on('event', ev => { if (!G.demo) UI.showEvent(ev); });
 on('election', e => { if (!G.demo) UI.showElection(e); });
-on('victory', () => { if (!G.demo) { UI.showVictory(); saveGame(); } });
+on('victory', () => { if (!G.demo) { UI.showVictory(); saveGame(); track('victory', { day: G.state.time.day }); } });
+on('goal', g => { if (!G.demo) track('goal_complete', { goal: g.text }); });
 on('gameover', () => { if (!G.demo && inGame) { clearSave(); UI.showGameOver(); } });
 on('built', () => { if (!G.demo) sfx('built'); });
 on('dug', () => {
