@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Bunderground</title>
+  <meta name="description" content="Bunderground — a cozy 3D rabbit colony management game. Dig tunnels, build farms, kitchens, lounges and factories, and guide your warren's society." />
+  <meta name="theme-color" content="#7a5536" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐰</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <canvas id="c"></canvas>
+
+  <div id="hud" class="hidden">
+    <header id="topbar">
+      <div id="resources"></div>
+      <div class="chip" id="popChip"></div>
+      <div class="chip" id="clockChip"></div>
+      <div id="speed" class="seg">
+        <button data-speed="0" title="Pause (Space)">⏸</button>
+        <button data-speed="1" title="Normal speed (1)">▶</button>
+        <button data-speed="2" title="Fast (2)">⏩</button>
+        <button data-speed="4" title="Very fast (3)">⏭</button>
+      </div>
+      <button class="icon-btn" id="menuBtn" title="Menu (Esc)">☰</button>
+    </header>
+
+    <aside id="left">
+      <div class="card" id="goalCard"></div>
+      <div class="card" id="logCard">
+        <div class="card-title">📜 Warren News</div>
+        <ul id="log"></ul>
+      </div>
+    </aside>
+
+    <aside id="inspector" class="card hidden"></aside>
+
+    <div id="buildMenu" class="card hidden"></div>
+    <div id="hint" class="hidden"></div>
+
+    <nav id="toolbar">
+      <button data-tool="select" class="tool active" title="Select (Esc)"><span>🖐️</span><small>Select</small></button>
+      <button data-tool="dig" class="tool" title="Dig (X)"><span>⛏️</span><small>Dig</small></button>
+      <button data-tool="undig" class="tool" title="Cancel digging (C)"><span>🚫</span><small>Undo dig</small></button>
+      <button data-tool="build" class="tool" title="Build (B)"><span>🏗️</span><small>Build</small></button>
+      <button data-tool="demolish" class="tool" title="Remove a room"><span>💥</span><small>Remove</small></button>
+      <button id="colonyBtn" class="tool" title="Colony overview (Tab)"><span>🐰</span><small>Colony</small></button>
+    </nav>
+
+    <div id="tooltip" class="hidden"></div>
+    <div id="toasts"></div>
+  </div>
+
+  <div id="title">
+    <div class="title-box">
+      <div class="logo"><span>🐰</span></div>
+      <h1>Bunderground</h1>
+      <p class="tagline">Rabbits have a secret civilization under your feet.<br />Farms, kitchens, lounges, even factories. You run it.</p>
+      <div id="titleButtons"></div>
+      <p class="small">Your warren is saved on this device.</p>
+    </div>
+  </div>
+
+  <div id="modal" class="hidden"><div class="modal-box" id="modalBox"></div></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

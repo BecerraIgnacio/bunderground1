@@ -1,0 +1,25 @@
+{
+  "name": "bunderground-trailer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts Trailer out/bunderground-trailer.mp4",
+    "audio": "node scripts/make-audio.mjs",
+    "capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.527",
+    "@remotion/google-fonts": "^4.0.527",
+    "@remotion/media": "^4.0.527",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "^4.0.527"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "puppeteer-core": "^25.12.0",
+    "typescript": "^7.0.2"
+  }
+}

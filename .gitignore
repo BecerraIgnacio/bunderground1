@@ -1,0 +1,6 @@
+node_modules
+dist
+.vercel
+trailer/node_modules
+trailer/out
+trailer/*.log
